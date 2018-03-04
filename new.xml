@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<compression>
+    <entry>
+        <Data>Data on disk</Data>
+        <Percentage>16</Percentage>
+	</entry>
+	<entry>
+        <Data>Fragmentation</Data>
+        <Percentage>4</Percentage>
+	</entry>
+	<entry>
+	    <Data>Remaining compression saved</Data>
+	    <Percentage>30</Percentage>
+	</entry>
+	<entry>
+	    <Data>Deduplication Saved</Data>
+	    <Percentage>50</Percentage>
+	</entry>
+</compression>
+
+
+
