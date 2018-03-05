@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
-<compression>
+<storage_efficiency>
+<overall_efficiency>
     <entry>
         <Data>Data on disk</Data>
-        <Percentage>16</Percentage>
+        <Percentage>18</Percentage>
 	</entry>
 	<entry>
         <Data>Fragmentation</Data>
-        <Percentage>4</Percentage>
+        <Percentage>2</Percentage>
 	</entry>
 	<entry>
 	    <Data>Remaining compression saved</Data>
@@ -16,7 +17,47 @@
 	    <Data>Deduplication Saved</Data>
 	    <Percentage>50</Percentage>
 	</entry>
-</compression>
+</overall_efficiency>
+<compression_data>
+    <entry>
+        <Data>Compressed Data</Data>
+        <Percentage>43</Percentage>
+	</entry>
+	<entry>
+        <Data>Data Saved</Data>
+        <Percentage>57</Percentage>
+	</entry>
+</compression_data>
+<dedupe_data>
+    <entry>
+        <Data>Data after Deduplication</Data>
+        <Percentage>35</Percentage>
+	</entry>
+	<entry>
+        <Data>Space Saved</Data>
+        <Percentage>65</Percentage>
+	</entry>
+</dedupe_data>
+<dedupe_stats>
+    <entry>
+        <Type>Total Logical Data</Type>
+        <Size>875 MB</Size>
+	</entry>
+	<entry>
+        <Type>After Deduplication</Type>
+        <Size>326 MB</Size>
+	</entry>
+</dedupe_stats>
+<dedupe_ratio>0.53</dedupe_ratio>
+<compression_ratio>
+0.43
+</compression_ratio>
+<avg_compression_factor>
+41
+</avg_compression_factor>
+
+</storage_efficiency>
+
 
 
 

@@ -8,81 +8,138 @@ function drawChart(data, name, id) {
   var chart = new google.visualization.PieChart(document.getElementById(id));
   chart.draw(data, options);
   }
+  document.getElementById("hl1").style.visibility = "hidden";
 </script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/javascript">
-	function draw_and_table(data, title, id, table) {
-		drawChart(data, title, id);
-		 var dvTable = $("#dvTable");
-                            dvTable.html("");
-                            dvTable.append(table);
+	function create_tbl_alone (customers1, dvTable) {
+		var customers = customers1.eq(0).children();
+		var table = $("<table />");
+		table[0].border = "1";
+		var row = $(table[0].insertRow(-1));
+		customers.eq(0).children().each(function () {
+			var headerCell = $("<th />");
+			headerCell.html(this.nodeName);
+			row.append(headerCell);
+		});		
+		
+		var data3 = new google.visualization.DataTable();
+		data3.addColumn('string','Data');
+		data3.addColumn('number','Percentage');
+		$(customers).each(function () {
+		row = $(table[0].insertRow(-1));
+			$(this).children().each(function () {
+				    var cell = $("<td />");
+				    cell.html($(this).text());
+				    data3.addRow([$(this).text(), parseInt($(this).next().text())]);
+				    row.append(cell);
+			});
+		});
+        dvTable.html("");
+        dvTable.append(table);
 	}
-	
-	function drawme(customers1) {
-	var customers = customers1.eq(0).children();
-                            //Create a HTML Table element.
-                            var table = $("<table />");
-                            table[0].border = "1";
-                            //Add the header row.
-                            var row = $(table[0].insertRow(-1));
-                            customers.eq(0).children().each(function () {
-                                var headerCell = $("<th />");
-                                headerCell.html(this.nodeName);
-                                row.append(headerCell);
-                            });		
-							
-							var data3 = new google.visualization.DataTable();
-							data3.addColumn('string','Data');
-							data3.addColumn('number','Percentage');
+	function drawme(customers1, dvTable, chart_title, chart_id) {
+	    var customers = customers1.eq(0).children();
+		var table = $("<table />");
+		table[0].border = "1";
+		var row = $(table[0].insertRow(-1));
+		customers.eq(0).children().each(function () {
+			var headerCell = $("<th />");
+			headerCell.html(this.nodeName);
+			row.append(headerCell);
+		});		
+		
+		var data3 = new google.visualization.DataTable();
+		data3.addColumn('string','Data');
+		data3.addColumn('number','Percentage');
+		$(customers).each(function () {
+		row = $(table[0].insertRow(-1));
+			$(this).children().each(function () {
+				    var cell = $("<td />");
+				    cell.html($(this).text());
+				    data3.addRow([$(this).text(), parseInt($(this).next().text())]);
+				    row.append(cell);
+			});
+		});
+        dvTable.html("");
+        dvTable.append(table);
+		drawChart(data3, chart_title, chart_id, table);
+	}
+	$(function () {
+		$("#upload").bind("click", function () {
+			var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xml)$/;
+			if (regex.test($("#fileUpload").val().toLowerCase())) {
+				if (typeof (FileReader) != "undefined") {
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						var xmlDoc = $.parseXML(e.target.result);
+						var customers1 = $(xmlDoc).find("overall_efficiency");							
+						var DsvTbl = $("#dvTable");
+						drawme(customers1, DsvTbl, 'Storage Efficiency', 'overall_efficiency');
 						
-                            //Add the data rows.
-                            $(customers).each(function () {
-                                row = $(table[0].insertRow(-1));
-                                $(this).children().each(function () {
-                                    var cell = $("<td />");
-                                    cell.html($(this).text());
-									data3.addRow([$(this).text(), parseInt($(this).next().text())]);
-                                    row.append(cell);
-                                });
-                            });
-							draw_and_table(data3, 'Overall efficiency', 'overall_efficiency', table);
-	}
-        $(function () {
-            $("#upload").bind("click", function () {
-                var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xml)$/;
-                if (regex.test($("#fileUpload").val().toLowerCase())) {
-                    if (typeof (FileReader) != "undefined") {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            var xmlDoc = $.parseXML(e.target.result);						
-                            var customers1 = $(xmlDoc).find("compression");
-							drawme(customers1);
-							<!-- customers1 = $(xmlDoc).find("compression"); -->
-							<!-- drawme(customers1); -->
-                        }
-                        reader.readAsText($("#fileUpload")[0].files[0]);
-                    } else {
-                        alert("This browser does not support HTML5.");
-                    }
-                } else {
-                    alert("Please upload a valid XML file.");
-                }
-            });
-        });
+						var customers2 = $(xmlDoc).find("compression_data");
+						var DsvTbl1 = $("#dvTable1");
+						drawme(customers2, DsvTbl1, 'Compression Stats', 'compression_pie');
+						
+						customers2 = $(xmlDoc).find("dedupe_data");
+						var DsvTbl2 = $("#dvTable2");
+						drawme(customers2, DsvTbl2, 'Deduplication Stats', 'deduplication_pie');
+						
+						customers2 = $(xmlDoc).find("dedupe_stats");
+						DsvTbl2 = $("#dvTable3");
+						create_tbl_alone(customers2, DsvTbl2);
+						
+						var x = xmlDoc.getElementsByTagName("dedupe_ratio");
+						document.getElementById("dedupe_ratio").innerHTML = "Deduplication Ratio : " + x[0].textContent;
+						x = xmlDoc.getElementsByTagName("compression_ratio");
+						document.getElementById("compression_ratio").innerHTML = "Compression Ratio : " + x[0].textContent;
+						x = xmlDoc.getElementsByTagName("avg_compression_factor");
+						document.getElementById("avg_compression_factor").innerHTML = "Average Compression Factor : " + x[0].textContent;
+					}
+					reader.readAsText($("#fileUpload")[0].files[0]);
+					document.getElementById("hl1").style.display = "block";
+					document.getElementById("hl2").style.display = "block";
+					document.getElementById("hl3").style.display = "block";
+				} else {
+					alert("This browser does not support HTML5.");
+				}
+			} else {
+				alert("Please upload a valid XML file.");
+			}
+		});
+	});
     </script>
 <script type="text/javascript"src="data1.js"></script>
 </head>
 <body>
 <h1>Hackathon Project - Storage Efficiency Statistics</h1>
-      <input type="file" id="fileUpload" />
-    <input type="button" id="upload" value="Upload" />
-    <hr />
-    <div id="dvTable">
-    </div> 
-	<div id="compression_pie"></div>
-  <div id="overall_efficiency"></div>
-  <div id="chart_div"></div>
-  <button type="button" onclick="drawfirstpie()">Try it</button>
+    <input type="file" id="fileUpload" />
+    <input type="button" id="upload" value="Upload" /> <hr />
+    <h2 id="hl1" style="display: none;">Overall Storage Efficiency</h1> 
+	<table>
+    <tr>
+	<td><div id="dvTable">            </div> </td>
+    <td><div id="overall_efficiency"> </div></td>
+	</tr>
+ </table>
  
+	<h2 id="hl2" style="display: none;">Compression Statistics</h2> 
+	<table>
+    <tr>
+	<td><div id="dvTable1">           </div> </td>
+	<td><div id="compression_pie">    </div></td>
+	<td><div> <label id="compression_ratio"></label><br>
+<label id="avg_compression_factor"></label>	</div></td>
+</tr>
+ </table>
+	<h2 id="hl3" style="display: none;">Deduplication Statistics</h2> 
+	<table>
+    <tr>
+	<td><div id="dvTable2">           </div> </td>
+	<td><div id="deduplication_pie">    </div></td>
+	<td><div> <label id="dedupe_ratio"></label>	</div></td>
+	</tr>
+	<tr><div id="dvTable3">    </div></tr>
+ </table>
 </body>
 </html>
