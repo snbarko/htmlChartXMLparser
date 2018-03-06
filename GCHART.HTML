@@ -8,7 +8,7 @@ function drawChart(data, name, id) {
   var chart = new google.visualization.PieChart(document.getElementById(id));
   chart.draw(data, options);
   }
-  document.getElementById("hl1").style.visibility = "hidden";
+  //document.getElementById("hl1").style.visibility = "hidden";
 </script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/javascript">
@@ -38,7 +38,7 @@ function drawChart(data, name, id) {
         dvTable.html("");
         dvTable.append(table);
 	}
-	function drawme(customers1, dvTable, chart_title, chart_id) {
+	function drawme(customers1, dvTable, chart_title, chart_id, table_needed) {
 	    var customers = customers1.eq(0).children();
 		var table = $("<table />");
 		table[0].border = "1";
@@ -61,8 +61,10 @@ function drawChart(data, name, id) {
 				    row.append(cell);
 			});
 		});
+		if (table_needed) {
         dvTable.html("");
         dvTable.append(table);
+		}
 		drawChart(data3, chart_title, chart_id, table);
 	}
 	$(function () {
@@ -73,33 +75,54 @@ function drawChart(data, name, id) {
 					var reader = new FileReader();
 					reader.onload = function (e) {
 						var xmlDoc = $.parseXML(e.target.result);
-						var customers1 = $(xmlDoc).find("overall_efficiency");							
-						var DsvTbl = $("#dvTable");
-						drawme(customers1, DsvTbl, 'Storage Efficiency', 'overall_efficiency');
+					//	var customers1 = $(xmlDoc).find("overall_efficiency");							
+					//	var DsvTbl = $("#dvTable");
+					//	drawme(customers1, DsvTbl, 'Storage Efficiency', 'overall_efficiency');
+						var customers2 = $(xmlDoc).find("compression_stats_chart");
+						var DsvTbl1 = $("#dvTable6");
+						drawme(customers2, DsvTbl1, 'Compression Statistics', 'compression_pie', 0);
 						
-						var customers2 = $(xmlDoc).find("compression_data");
+						var customers2 = $(xmlDoc).find("compression_stats");
 						var DsvTbl1 = $("#dvTable1");
-						drawme(customers2, DsvTbl1, 'Compression Stats', 'compression_pie');
+						create_tbl_alone(customers2, DsvTbl1);
+						//drawme(customers2, DsvTbl1, 'Compression Stats', 'compression_pie', 1);
 						
-						customers2 = $(xmlDoc).find("dedupe_data");
+						var x = xmlDoc.getElementsByTagName("compression_ratio");
+						document.getElementById("compression_ratio").innerHTML = "Compression Ratio : " + x[0].textContent;
+						
+						customers2 = $(xmlDoc).find("deduplication_chart_stats");
 						var DsvTbl2 = $("#dvTable2");
-						drawme(customers2, DsvTbl2, 'Deduplication Stats', 'deduplication_pie');
+						drawme(customers2, DsvTbl2, 'Deduplication Statistics', 'deduplication_pie', 0);
 						
-						customers2 = $(xmlDoc).find("dedupe_stats");
-						DsvTbl2 = $("#dvTable3");
+						var customers2 = $(xmlDoc).find("deduplication_stats");
+						var DsvTbl2 = $("#dvTable3");
 						create_tbl_alone(customers2, DsvTbl2);
 						
-						var x = xmlDoc.getElementsByTagName("dedupe_ratio");
+						var x = xmlDoc.getElementsByTagName("deduplication_ratio");
 						document.getElementById("dedupe_ratio").innerHTML = "Deduplication Ratio : " + x[0].textContent;
-						x = xmlDoc.getElementsByTagName("compression_ratio");
-						document.getElementById("compression_ratio").innerHTML = "Compression Ratio : " + x[0].textContent;
-						x = xmlDoc.getElementsByTagName("avg_compression_factor");
-						document.getElementById("avg_compression_factor").innerHTML = "Average Compression Factor : " + x[0].textContent;
+						
+						customers2 = $(xmlDoc).find("fragmentation_stats");
+						DsvTbl2 = $("#dvTable4");
+						create_tbl_alone(customers2, DsvTbl2);
+						
+						customers2 = $(xmlDoc).find("compression_density");
+						DsvTbl2 = $("#dvTable5");
+						drawme(customers2, DsvTbl2, 'Compression Density', 'compression_density', 1);
+						
+						customers2 = $(xmlDoc).find("overall_efficiency_chart");
+						DsvTbl2 = $("#dvTable6");
+						create_tbl_alone(customers2, DsvTbl2);
+						
+						
+					//	x = xmlDoc.getElementsByTagName("avg_compression_factor");
+					//	document.getElementById("avg_compression_factor").innerHTML = "Average Compression Factor : " + x[0].textContent;
 					}
 					reader.readAsText($("#fileUpload")[0].files[0]);
-					document.getElementById("hl1").style.display = "block";
+					//document.getElementById("hl1").style.display = "block";
 					document.getElementById("hl2").style.display = "block";
 					document.getElementById("hl3").style.display = "block";
+					document.getElementById("hl4").style.display = "block";
+					document.getElementById("hl5").style.display = "block";
 				} else {
 					alert("This browser does not support HTML5.");
 				}
@@ -122,7 +145,15 @@ function drawChart(data, name, id) {
     <td><div id="overall_efficiency"> </div></td>
 	</tr>
  </table>
- 
+ <h2 id="hl3" style="display: none;">Deduplication Statistics</h2> 
+	<table>
+    <tr>
+	<td><div id="dvTable3">           </div> </td>
+	<td><div id="deduplication_pie">    </div></td>
+	<td><div> <label id="dedupe_ratio"></label>	</div></td>
+	</tr>
+	<!-- <tr><div id="dvTable2">    </div></tr> -->
+ </table>
 	<h2 id="hl2" style="display: none;">Compression Statistics</h2> 
 	<table>
     <tr>
@@ -130,16 +161,28 @@ function drawChart(data, name, id) {
 	<td><div id="compression_pie">    </div></td>
 	<td><div> <label id="compression_ratio"></label><br>
 <label id="avg_compression_factor"></label>	</div></td>
+</tr> </table>
+<table>
+<tr><td><div id="dvTable5">    </div></td>
+<td><div id="compression_density">    </div></td>
 </tr>
- </table>
-	<h2 id="hl3" style="display: none;">Deduplication Statistics</h2> 
+</table>
+	
+ <h2 id="hl4" style="display: none;">Fragmentation Statistics</h2> 
 	<table>
     <tr>
-	<td><div id="dvTable2">           </div> </td>
-	<td><div id="deduplication_pie">    </div></td>
-	<td><div> <label id="dedupe_ratio"></label>	</div></td>
+	<td></td>
+	<td><div id="dvTable4">           </div> </td>
+	<td></td>
+	</tr>	
+ </table>
+ 
+ <h2 id="hl5" style="display: none;">Overall Efficiency</h2> 
+	<table>
+    <tr>
+	<td><div id="dvTable6">           </div> </td>
+	<!--<td><div id="compression_density">    </div></td> -->
 	</tr>
-	<tr><div id="dvTable3">    </div></tr>
  </table>
 </body>
 </html>

@@ -1,0 +1,105 @@
+<storage_efficiency>
+	<deduplication_stats>
+		<entry>
+			<Data>Logical Data</Data>
+			<Size>3.60GB</Size>
+		</entry>
+		<entry>
+			<Data>Post Deduplication Data</Data>
+			<Size>1.76GB</Size>
+		</entry>
+		<entry>
+			<Data>Dedupe Savings</Data>
+			<Size>1.84GB</Size>
+		</entry>
+	</deduplication_stats>
+	<deduplication_ratio>0.488069306301305</deduplication_ratio>
+	<deduplication_chart_stats>
+		<entry>
+			<Data>Uncompressed Data</Data>
+			<Size>1886916608</Size>
+		</entry>
+		<entry>
+			<Data>Dedupe Savings</Data>
+			<Size>1979166720</Size>
+		</entry>
+	</deduplication_chart_stats>
+	<compression_stats>
+		<entry>
+			<Data>Pre Compression Data</Data>
+			<Size>1.76GB</Size>
+		</entry>
+		<entry>
+			<Data>Post Compression Data</Data>
+			<Size>926.42MB</Size>
+		</entry>
+		<entry>
+			<Data>Compression Savings</Data>
+			<Size>873.09MB</Size>
+		</entry>
+	</compression_stats>
+	<compression_stats_chart>
+		<entry>
+			<Data>Compressed Data</Data>
+			<Size>971419648</Size>
+		</entry>
+		<entry>
+			<Data>Compression Savings</Data>
+			<Size>915496960</Size>
+		</entry>
+	</compression_stats_chart>
+	<compression_ratio>0.514818537227057</compression_ratio>
+	<compression_density>		<entry>
+			<Data>High Density Compressed</Data>
+			<Percentage>57</Percentage>
+		</entry>
+		<entry>
+			<Data>Low Density Compressed</Data>
+			<Percentage>27</Percentage>
+		</entry>
+		<entry>
+			<Data>Not Compressed</Data>
+			<Percentage>11</Percentage>
+		</entry>
+	</compression_density>
+	<fragmentation_stats>
+		<entry>
+			<Data>Pack Density</Data>
+			<Value>96%</Value>
+		</entry>
+		<entry>
+			<Data>Partial Stripe Count</Data>
+			<Value>0</Value>
+		</entry>
+		<entry>
+			<Data>Total Stripe Count</Data>
+			<Value>24573</Value>
+		</entry>
+		<entry>
+			<Data>Free Stripe Count</Data>
+			<Value>22009</Value>
+		</entry>
+		<entry>
+			<Data>Fragmentation Factor</Data>
+			<Value>0</Value>
+		</entry>
+	</fragmentation_stats>
+	<overall_efficiency_chart>
+		<entry>
+			<Data>Logical Data</Data>
+			<Value>3.60GB</Value>
+		</entry>
+		<entry>
+			<Data>Post Deduplication Data</Data>
+			<Value>1.76GB</Value>
+		</entry>
+		<entry>
+			<Data>Post Compression Data</Data>
+			<Value>926.42MB</Value>
+		</entry>
+		<entry>
+			<Data>Ondisk Data Size</Data>
+			<Value>926.42MB</Value>
+		</entry>
+	</overall_efficiency_chart>
+</storage_efficiency>
